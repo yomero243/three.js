@@ -1,15 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-	<title>Saludo2ccra</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 15;
+        }
 
+        h1 {
+            font-size: 5em;
+            text-align: right;
+        }
+    </style>
 </head>
 <body>
-	
+    <h1>Portafolio</h1>
+    <script src="./three.min.js"></script>
+    <script>
+
+    let camara;
+    let escena;
+    let renderizado;
+    let geometria;
+    let material; 
+    let malla;
+
+
+    function inicializa(){
+     
+    //THREE es el namespace o espacio de nombre 
+    //parametros de camara(FOV(field of view),relacion ancho alto,distanciaMinima,distanciaMaxima)
+     camara=new THREE.PerspectiveCamera(100,window.innerWidth/innerHeight,1,1500)
+     //posicion de la camara(x,y,z)
+     camara.position.set(0,0,25)
+     //Montar la escena 
+     escena=new THREE.Scene()
+     //añadimos la camara a la escena 
+     escena.add(camara)
+     //Geometria que vamos a poner en la escena 
+     //Icosaedro parametros(radio,detalle)
+     geometria=new THREE.TorusGeometry(10,2)
+     //Material 
+     //Vamos a ver por ahora dos tipos que son 
+     //MeshNormalMaterial()
+     material=new THREE.MeshNormalMaterial({
+         color:'blue',
+         wireframe:false,
+         wireframeLinewidth:1
+     })
+
+     //creamos la malla que llama en sus parametros(geometria,material)
+      malla=new THREE.Mesh(geometria,material)
+      //añadimos a la escena la malla
+      escena.add(malla)
+      //vamos a renderizar  
+      //se dedica a borrar y a pintar el canvas o el lienzo 3d 
+      renderizado=new THREE.WebGLRenderer()
+      //color del renderizado (color,alfa)
+      renderizado.setClearColor('white',.5)
+      //tamaño del renderizado ancho y alto que tiene que ser lo que vamos a ver el tamaño que hemos puesto 
+      //en la camara 
+      renderizado.setSize(window.innerWidth,window.innerHeight)
+      //añadimos al body el renderer  
+      document.body.appendChild(renderizado.domElement)
+       
+
+    }
+    inicializa()
+
+    function animando(){
+        requestAnimationFrame(animando)
+
+        malla.rotation.x+=0.012
+        malla.rotation.y+=0.012
+
+        renderizado.render(escena,camara)
+    
+    }
+    animando()
+       
+    
+    
+    </script>
+
+
+
+    
 </body>
-<script src="./three.js"></script>
-<script src="script.js"></script>
 </html>
